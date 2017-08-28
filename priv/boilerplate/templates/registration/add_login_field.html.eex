@@ -1,0 +1,30 @@
+<%% login_field = Coherence.Config.login_field %>
+<h3><%%= dgettext "coherence_assent", "Add %{field}", field: humanize(login_field) %></h3>
+
+<%%= form_for @changeset, Coherence.ControllerHelpers.router_helpers().coherence_assent_registration_path(@conn, :create, @provider), [as: :registration], fn f  -> %>
+
+  <%% if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p><%%= dgettext "coherence", "Oops, something went wrong! Please check the errors below." %></p>
+    </div>
+  <%% end %>
+
+  <%%= if login_field == :email do %>
+    <div class="form-group">
+      <%%= required_label f, dgettext("coherence", "Email"), class: "control-label" %>
+      <%%= text_input f, :email, class: "form-control", required: "" %>
+      <%%= error_tag f, :email %>
+    </div>
+  <%% else %>
+    <div class="form-group">
+      <%%= required_label f, humanize(login_field), class: "control-label" %>
+      <%%= text_input f, login_field, class: "form-control", required: "" %>
+      <%%= error_tag f, login_field %>
+    </div>
+  <%% end %>
+  <div class="form-group">
+    <%%= submit dgettext("coherence", "Register"), class: "btn btn-primary" %>
+    <%%= link dgettext("coherence", "Cancel"), to: Coherence.Config.logged_out_url("/"), class: "btn" %>
+  </div>
+
+<%% end %>
