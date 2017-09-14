@@ -89,7 +89,7 @@ config :coherence_assent, :providers,
       ]
 ```
 
-Strategy for Twitter, Facebook, Google and Github are included. You can also add your own. You can add your own strategy. This is an example of an OAuth 2.0 implementation:
+Strategies for Twitter, Facebook, Google and Github are included. You can add your own strategy. Here's an example of an OAuth 2.0 implementation:
 
 ```elixir
 defmodule TestProvider do
