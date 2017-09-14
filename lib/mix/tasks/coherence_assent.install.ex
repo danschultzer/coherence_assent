@@ -413,7 +413,9 @@ defmodule Mix.Tasks.CoherenceAssent.Install do
     existing_migrations = to_string File.ls!(path)
 
     for {name, template} <- migrations() do
-      create_migration_file(repo, existing_migrations, name, path, template, config)
+      %{repo: repo, existing_migrations: existing_migrations, name: name,
+        path: path, template: template, config: config}
+      |> create_migration_file
     end
 
     config
@@ -433,7 +435,8 @@ defmodule Mix.Tasks.CoherenceAssent.Install do
     end
   end
 
-  defp create_migration_file(repo, existing_migrations, name, path, template, config) do
+  defp create_migration_file(%{repo: repo, existing_migrations: existing_migrations,
+                               name: name, path: path, template: template, config: config}) do
     unless String.match? existing_migrations, ~r/\d{14}_#{name}\.exs/ do
       file = Path.join(path, "#{next_migration_number(existing_migrations)}_#{name}.exs")
       create_file file, EEx.eval_string(template, [mod: Module.concat([repo, Migrations, camelize(name)])])
