@@ -15,6 +15,8 @@ Use Google, Github, Twitter, Facebook, or add your own strategy for authorizatio
 
 ## Installation
 
+**Note:** This version requires Coherence v0.5.
+
 Add CoherenceAssent to your list of dependencies in `mix.exs`:
 
 ```elixir
@@ -29,7 +31,65 @@ end
 
 Run `mix deps.get` to install it.
 
-Run to update all coherence files:
+## Set up Coherence
+
+You need to make sure the Coherence views and routes has been set up first. If this hasn't been done, follow the next steps.
+
+Add all the Coherence files to your project:
+
+```
+mix coh.install --full --confirmable --invitable
+```
+
+Update routes:
+
+```elixir
+# lib/my_project_web/router.ex
+
+defmodule MyProjectWeb.Router do
+  use MyProjectWeb, :router
+  use Coherence.Router                    # Add this
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug Coherence.Authentication.Session # Add this
+  end
+
+  # Add this block
+  pipeline :protected do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug Coherence.Authentication.Session, protected: true
+  end
+
+  # ...
+
+  # Add this block
+  scope "/" do
+    pipe_through :browser
+    coherence_routes()
+  end
+
+  # Add this block
+  scope "/" do
+    pipe_through :protected
+    coherence_routes :protected
+  end
+
+  # ...
+end
+```
+
+## Getting started
+
+Run to update all Coherence files:
 
 ```bash
 mix coherence_assent.install
@@ -50,13 +110,17 @@ If the files cannot be updated, install instructions will be printed instead. It
 Set up routes:
 
 ```elixir
+# lib/my_project_web/router.ex
+
 defmodule MyAppWeb.Router do
   use MyAppWeb, :router
   use Coherence.Router
   use CoherenceAssent.Router  # Add this
 
-  scope "/", MyAppWeb do
-    pipe_through [:browser, :public]
+  # ...
+
+  scope "/" do
+    pipe_through [:browser]
     coherence_routes()
     coherence_assent_routes() # Add this
   end
@@ -74,9 +138,13 @@ coherence_assent_registration_path  GET    /auth/:provider/new        CoherenceA
 coherence_assent_registration_path  GET    /auth/:provider/create     CoherenceAssent.RegistrationController  :create
 ```
 
+Remember to run the new migrations: `mix ecto.setup`
+
 ## Setting up a provider
 
-Add the following to `config/config.exs`:
+Strategies for Twitter, Facebook, Google, and Github are included. We'll go through how to set up the Github strategy.
+
+First, register [a new app on Github](https://github.com/settings/applications/new) and add "http://localhost:4000/auth/github/callback" as callback URL. Then add the following to `config/config.exs` and add the client id and client secret:
 
 ```elixir
 config :coherence_assent, :providers,
@@ -89,7 +157,11 @@ config :coherence_assent, :providers,
       ]
 ```
 
-Strategies for Twitter, Facebook, Google and Github are included. You can add your own strategy. Here's an example of an OAuth 2.0 implementation:
+Now start (or restart) your Phoenix app, and visit `http://localhost:4000/registrations/new`. You'll see a "Sign in with Github" link.
+
+## Custom provider
+
+You can add your own strategy. Here's an example of an OAuth 2.0 implementation:
 
 ```elixir
 defmodule TestProvider do
