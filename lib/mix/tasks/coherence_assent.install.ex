@@ -10,26 +10,30 @@ defmodule Mix.Tasks.CoherenceAssent.Install do
 
   @moduledoc """
   Configure CoherenceAssent for your Phoenix/Coherence application.
+
   This installer will normally do the following unless given an option not to do so:
     * Update User schema installed by Coherence.
     * Update registration and session templates.
     * Generate appropriate migration files.
     * Generate appropriate template files.
+
   ## Examples
       mix coherence_assent.install
-  # ## Option list
-  #   * Your Coherence user schema and Coherence templates will be modified unless the `--no-update-coherence` option is given.
-  #   * A `--config-file config/config.exs` option can be given to change what config file to append to.
-  #   * A `--installed-options` option to list the previous install options.
-  #   * A `--silent` option to disable printing instructions
-  #   * A `--web-path="lib/my_project_web"` option can be given to specify the web path
-  #   * A `--migration-path` option to set the migration path
-  #   * A `--module` option to override the module
-  # ## Disable Options
-  #   * `--no-update-coherence` -- Don't update Coherence user file.
-  #   * `--no-migrations` -- Don't create any migration files.
-  #   * `--no-templates` -- Don't create the `WEB_PATH/templates/coherence_assent` files.
-  #   * `--no-boilerplate` -- Don't create any of the boilerplate files.
+
+  ## Option list
+    * Your Coherence user schema and Coherence templates will be modified unless the `--no-update-coherence` option is given.
+    * A `--config-file config/config.exs` option can be given to change what config file to append to.
+    * A `--installed-options` option to list the previous install options.
+    * A `--silent` option to disable printing instructions
+    * A `--web-path="lib/my_project_web"` option can be given to specify the web path
+    * A `--migration-path` option to set the migration path
+    * A `--module` option to override the module
+
+  ## Disable Options
+    * `--no-update-coherence` -- Don't update Coherence user file.
+    * `--no-migrations` -- Don't create any migration files.
+    * `--no-templates` -- Don't create the `WEB_PATH/templates/coherence_assent` files.
+    * `--no-boilerplate` -- Don't create any of the boilerplate files.
   """
 
   @all_options       ~w(auth registration)

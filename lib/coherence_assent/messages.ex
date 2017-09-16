@@ -1,8 +1,10 @@
 defmodule CoherenceAssent.Messages do
   @moduledoc """
   Interface for handling localization of build in CoherenceAssent messages.
+
   The following module defines the behaviour for rendering internal
   CoherenceAssent messages.
+
   The coherence_assent mix tasks adds to the coherence messages file in the
   user's app that uses this behaviour to ensure the user has implement all the
   required messages.
