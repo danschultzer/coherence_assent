@@ -23,7 +23,7 @@ Add CoherenceAssent to your list of dependencies in `mix.exs`:
 def deps do
   [
     # ...
-    {:coherence_assent, git: "https://github.com/danschultzer/coherence_assent.git"}
+    {:coherence_assent, "~> 0.1.0"}
     # ...
   ]
 end
