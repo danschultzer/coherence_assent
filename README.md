@@ -15,7 +15,7 @@ Use Google, Github, Twitter, Facebook, or add your own strategy for authorizatio
 
 ## Installation
 
-**Note:** This version requires Coherence v0.5.
+**Note:** This version requires Coherence v0.5. If you get dependency resolution failure with ecto when you install Coherence or coherence_assent, just run `mix deps.unlock ecto`.
 
 Add CoherenceAssent to your list of dependencies in `mix.exs`:
 

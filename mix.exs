@@ -48,7 +48,6 @@ defmodule CoherenceAssent.Mixfile do
       {:coherence, "~> 0.5"},
       {:oauth2, "~> 0.9"},
       {:oauther, "~> 1.1"},
-      {:timex_ecto, "~> 3.0", override: true}, # To prevent ecto/timex_ecto dependency errors
 
       # Dev and test dependencies
       {:postgrex, ">= 0.11.1", only: :test},
