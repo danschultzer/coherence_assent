@@ -59,7 +59,8 @@ defmodule CoherenceAssent.Strategy.Basecamp do
         "first_name"  => user["identity"]["first_name"],
         "last_name"   => user["identity"]["last_name"],
         "email"       => user["identity"]["email_address"],
-        "accounts"    => user["accounts"]}
+        "accounts"    => user["accounts"],
+        "token"       => Map.from_struct(client.token) |> Map.take([:access_token, :expires_at, :refresh_token])}
         |> Helpers.prune
     {:ok, %{conn: conn, client: client, user: user}}
   end
