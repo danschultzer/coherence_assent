@@ -8,3 +8,12 @@ erl_crash.dump
 
 /tmp
 /priv/test/migrations/*
+
+# OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# vim
+*.vim
+*.swp
