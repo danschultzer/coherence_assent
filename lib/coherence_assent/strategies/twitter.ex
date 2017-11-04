@@ -7,17 +7,16 @@ defmodule CoherenceAssent.Strategy.Twitter do
   alias CoherenceAssent.Strategies.OAuth, as: OAuthHelper
 
   @doc false
-  def authorize_url(conn: conn, config: config) do
-    config = config |> set_config
-    OAuthHelper.authorize_url(conn: conn, config: config)
+  def authorize_url(conn, config) do
+    OAuthHelper.authorize_url(conn, set_config(config))
   end
 
   @doc false
-  def callback(conn: conn, config: config, params: params) do
+  def callback(conn, config, params) do
     config = config |> set_config
 
-    [conn: conn, config: config, params: params]
-    |> OAuthHelper.callback()
+    conn
+    |> OAuthHelper.callback(config, params)
     |> normalize
   end
 

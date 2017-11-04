@@ -16,7 +16,7 @@ defmodule CoherenceAssent.Strategy.GithubTest do
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
-    assert {:ok, %{conn: _conn, url: url}} = Github.authorize_url(conn: conn, config: config)
+    assert {:ok, %{conn: _conn, url: url}} = Github.authorize_url(conn, config)
     assert url =~ "https://github.com/login/oauth/authorize?client_id="
   end
 
@@ -82,9 +82,7 @@ defmodule CoherenceAssent.Strategy.GithubTest do
                    "urls" => %{"Blog" => "https://github.com/blog",
                                "GitHub" => "https://github.com/octocat"}}
 
-      {:ok, %{user: user}} = Github.callback(conn: conn,
-                                             config: config,
-                                             params: params)
+      {:ok, %{user: user}} = Github.callback(conn, config, params)
       assert expected == user
     end
   end

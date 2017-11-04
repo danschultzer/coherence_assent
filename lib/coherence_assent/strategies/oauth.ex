@@ -4,15 +4,17 @@ defmodule CoherenceAssent.Strategies.OAuth do
   """
 
   @doc false
-  def authorize_url(conn: conn, config: config) do
+  @spec authorize_url(Conn.t, map) :: {:ok, %{conn: Conn.t, token: String.t, url: String.t}} | {:error, term}
+  def authorize_url(conn, config) do
     {:ok, %{conn: conn}}
     |> get_request_token(config, [{"oauth_callback", config[:redirect_uri]}])
     |> build_authorize_url(config)
   end
 
   @doc false
-  def callback(conn: conn, config: config, params: %{"oauth_token" => oauth_token, "oauth_verifier" => oauth_verifier}) do
-    {:ok, %{conn: conn}}
+  @spec callback(Conn.t, map, map) :: {:ok, %{conn: Conn.t, user: map}} | {:error, term}
+  def callback(conn, config, %{"oauth_token" => oauth_token, "oauth_verifier" => oauth_verifier}) do
+    conn
     |> get_access_token(config, oauth_token, oauth_verifier)
     |> get_user(config)
   end
@@ -40,11 +42,14 @@ defmodule CoherenceAssent.Strategies.OAuth do
   end
   defp build_authorize_url({:error, error}, _config), do: {:error, error}
 
-  def get_access_token({:ok, %{conn: conn}}, config, oauth_token, oauth_verifier) do
+  @doc false
+  @spec get_access_token(Conn.t, map, String.t, String.t) :: {:ok, %{conn: Conn.t, token: String.t}} | {:error, term}
+  def get_access_token(conn, config, oauth_token, oauth_verifier) do
     creds = OAuther.credentials(consumer_key: config[:consumer_key],
                                 consumer_secret: config[:consumer_secret],
                                 token: oauth_token)
     access_token_url = process_url(config, config[:access_token_url] || "/oauth/access_token")
+
     [site: config[:site],
      url: access_token_url,
      method: "post",
@@ -74,6 +79,8 @@ defmodule CoherenceAssent.Strategies.OAuth do
   defp process_request_token_response({:error, error}, conn),
     do: {:error, %{conn: conn, error: error}}
 
+  @doc false
+  @spec get_user({:ok, map} | {:error, term}, Keyword.t) :: {:ok, map} | {:error, term}
   def get_user({:ok, %{conn: conn, token: token}}, config) do
     creds = OAuther.credentials(consumer_key: config[:consumer_key],
                                 consumer_secret: config[:consumer_secret],

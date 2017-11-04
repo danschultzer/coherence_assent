@@ -26,7 +26,7 @@ defmodule CoherenceAssent.TwitterTest do
       |> Plug.Conn.resp(200, URI.encode_query(token))
     end
 
-    assert {:ok, %{conn: _conn, url: url}} = Twitter.authorize_url(conn: conn, config: config)
+    assert {:ok, %{conn: _conn, url: url}} = Twitter.authorize_url(conn, config)
     assert url =~ bypass_server(bypass) <> "/oauth/authenticate?oauth_token=token"
   end
 
@@ -148,9 +148,7 @@ defmodule CoherenceAssent.TwitterTest do
                    "uid" => "38895958",
                    "urls" => %{"Twitter" => "https://twitter.com/theSeanCook"}}
 
-       {:ok, %{user: user}} = Twitter.callback(conn: conn,
-                                               config: config,
-                                               params: params)
+       {:ok, %{user: user}} = Twitter.callback(conn, config, params)
        assert expected == user
     end
   end

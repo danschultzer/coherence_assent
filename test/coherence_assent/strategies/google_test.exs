@@ -16,7 +16,7 @@ defmodule CoherenceAssent.GoogleTest do
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
-    assert {:ok, %{conn: _conn, url: url}} = Google.authorize_url(conn: conn, config: config)
+    assert {:ok, %{conn: _conn, url: url}} = Google.authorize_url(conn, config)
     assert url =~ "https://accounts.google.com/o/oauth2/auth?client_id="
   end
 
@@ -51,9 +51,7 @@ defmodule CoherenceAssent.GoogleTest do
                    "uid" => "1",
                    "urls" => %{"Google" => "https://example.com/profile"}}
 
-      {:ok, %{user: user}} = Google.callback(conn: conn,
-                                             config: config,
-                                             params: params)
+      {:ok, %{user: user}} = Google.callback(conn, config, params)
       assert expected == user
     end
   end

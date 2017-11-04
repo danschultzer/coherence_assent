@@ -66,7 +66,7 @@ defmodule CoherenceAssent.AuthControllerTest do
       assert CoherenceAssent.Test.User.confirmed?(new_user)
     end
 
-    test "with missing params", %{conn: conn, server: server, user: user} do
+    test "with missing params", %{conn: conn, server: server} do
       bypass_oauth(server, %{}, %{email: "newuser@example.com", name: ""})
 
       conn = get conn, coherence_assent_auth_path(conn, :callback, @provider, @callback_params)

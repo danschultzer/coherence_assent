@@ -15,8 +15,7 @@ defmodule CoherenceAssent.AuthController do
 
     {:ok, %{conn: conn, url: url}} = call_strategy!(config,
                                                     :authorize_url,
-                                                    [[conn: conn,
-                                                      config: config]])
+                                                    [conn, config])
 
     redirect(conn, external: url)
   end
@@ -27,7 +26,7 @@ defmodule CoherenceAssent.AuthController do
              |> Map.merge(params)
 
     config
-    |> call_strategy!(:callback, [[conn: conn, config: config, params: params]])
+    |> call_strategy!(:callback, [conn, config, params])
     |> callback_handler(provider, params)
   end
 

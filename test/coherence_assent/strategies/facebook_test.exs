@@ -15,7 +15,7 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
-    assert {:ok, %{conn: _conn, url: url}} = Facebook.authorize_url(conn: conn, config: config)
+    assert {:ok, %{conn: _conn, url: url}} = Facebook.authorize_url(conn, config)
     assert url =~ "https://www.facebook.com/v2.6/dialog/oauth?client_id="
   end
 
@@ -38,9 +38,7 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
                    "uid" => "1",
                    "urls" => %{}}
 
-     {:ok, %{user: user}} = Facebook.callback(conn: conn,
-                                              config: config,
-                                              params: params)
+     {:ok, %{user: user}} = Facebook.callback(conn, config, params)
       assert expected == user
     end
   end
