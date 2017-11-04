@@ -2,14 +2,14 @@
 
 [![Build Status](https://travis-ci.org/danschultzer/coherence_assent.svg?branch=master)](https://travis-ci.org/danschultzer/coherence_assent)
 
-Use Google, Github, Twitter, Facebook, or add your own strategy for authorization to your Coherence Phoenix app.
+Use Google, Github, Twitter, Facebook, Basecamp, or add your own strategy for authorization to your Coherence Phoenix app.
 
 ## Features
 
 * Collects required login field if missing verified email from provider
 * Multiple providers can be used for accounts
   * When removing auth: Validates user has password or another provider authentication
-* Github, Google, Twitter and Facebook strategies included
+* Github, Google, Twitter, Facebook and Basecamp strategies included
 * Updates Coherence templates automatically
 * You can add your custom strategy with ease
 
@@ -23,7 +23,7 @@ Add CoherenceAssent to your list of dependencies in `mix.exs`:
 def deps do
   [
     # ...
-    {:coherence_assent, "~> 0.2.0"}
+    {:coherence_assent, "~> 0.2.1"}
     # ...
   ]
 end
@@ -142,7 +142,7 @@ Remember to run the new migrations: `mix ecto.setup`
 
 ## Setting up a provider
 
-Strategies for Twitter, Facebook, Google, and Github are included. We'll go through how to set up the Github strategy.
+Strategies for Twitter, Facebook, Google, Github and Basecamp are included. We'll go through how to set up the Github strategy.
 
 First, register [a new app on Github](https://github.com/settings/applications/new) and add "http://localhost:4000/auth/github/callback" as callback URL. Then add the following to `config/config.exs` and add the client id and client secret:
 
