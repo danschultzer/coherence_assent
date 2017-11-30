@@ -15,7 +15,7 @@ defmodule CoherenceAssent.Strategy.Github do
 
     conn
     |> OAuth2Helper.callback(config, params)
-    |> get_email
+    |> get_email(config)
     |> normalize
   end
 
@@ -25,14 +25,15 @@ defmodule CoherenceAssent.Strategy.Github do
       authorize_url: "https://github.com/login/oauth/authorize",
       token_url: "https://github.com/login/oauth/access_token",
       user_url: "/user",
-      authorization_params: [scope: "user,user:email"]
+      user_emails_url: "/user/emails",
+      authorization_params: [scope: "read:user,user:email"]
     ]
     |> Keyword.merge(config)
     |> Keyword.put(:strategy, OAuth2.Strategy.AuthCode)
   end
 
-  defp get_email({:ok, %{conn: conn, client: client, user: user}}) do
-    case OAuth2.Client.get(client, "/user/emails") do
+  defp get_email({:ok, %{conn: conn, client: client, user: user}}, config) do
+    case OAuth2.Client.get(client, config[:user_emails_url]) do
       {:ok, %OAuth2.Response{body: emails}} ->
         user = Map.put(user, "email", get_primary_email(emails))
         {:ok, %{conn: conn, client: client, user: user}}
