@@ -42,7 +42,7 @@ defmodule CoherenceAssent.Strategy.Github do
         {:error, %{conn: conn, error: error}}
     end
   end
-  defp get_email(response), do: response
+  defp get_email(response, _config), do: response
 
   defp get_primary_email(emails) do
     emails
