@@ -73,9 +73,9 @@ defmodule CoherenceAssent.UserIdentities do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_identity_from_user(user, provider) do
+  def delete_identity_from_user(%{id: user_id}, provider) do
     UserIdentity
-    |> CoherenceAssent.repo.get_by(provider: provider, user_id: user.id)
+    |> CoherenceAssent.repo.get_by(provider: provider, user_id: user_id)
     |> delete_identity()
   end
 
