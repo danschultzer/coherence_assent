@@ -34,7 +34,7 @@ defmodule CoherenceAssent.AuthControllerTest do
       bypass_oauth(server)
 
       conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
+      |> put_coherence_session(user)
       |> get(coherence_assent_auth_path(conn, :callback, @provider, @callback_params))
 
       assert redirected_to(conn) == "/session_created"
@@ -46,7 +46,7 @@ defmodule CoherenceAssent.AuthControllerTest do
       fixture(:user_identity, user, %{provider: @provider, uid: "1"})
 
       conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
+      |> put_coherence_session(user)
       |> get(coherence_assent_auth_path(conn, :callback, @provider, @callback_params))
 
       assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :new)
@@ -160,12 +160,12 @@ defmodule CoherenceAssent.AuthControllerTest do
   end
 
   describe "delete/2" do
+    setup :put_coherence_session
+
     test "with no user password", %{conn: conn, user: user} do
       fixture(:user_identity, user, %{provider: @provider, uid: "1"})
 
-      conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
-      |> delete(coherence_assent_auth_path(conn, :delete, @provider))
+      conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
       assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
       assert length(get_user_identities()) == 1
@@ -176,9 +176,7 @@ defmodule CoherenceAssent.AuthControllerTest do
       fixture(:user_identity, user, %{provider: @provider, uid: "1"})
       fixture(:user_identity, user, %{provider: "another_provider", uid: "2"})
 
-      conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
-      |> delete(coherence_assent_auth_path(conn, :delete, @provider))
+      conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
       assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
       assert length(get_user_identities()) == 1
@@ -190,20 +188,28 @@ defmodule CoherenceAssent.AuthControllerTest do
              |> CoherenceAssent.repo.update!
       fixture(:user_identity, user, %{provider: @provider, uid: "1"})
 
-      conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
-      |> delete(coherence_assent_auth_path(conn, :delete, @provider))
+      conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
       assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
       assert length(get_user_identities()) == 0
     end
 
-    test "with current_user session without provider", %{conn: conn, user: user} do
-      conn = conn
-      |> assign(Coherence.Config.assigns_key, user)
-      |> delete(coherence_assent_auth_path(conn, :delete, @provider))
+    test "with current_user session without provider", %{conn: conn} do
+      conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
       assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
     end
+  end
+
+  defp put_coherence_session(conn, user) do
+    id = UUID.uuid1
+    Coherence.CredentialStore.Session.put_credentials({id, user, :id})
+
+    conn
+    |> session_conn()
+    |> Plug.Conn.put_session("session_auth", id)
+  end
+  defp put_coherence_session(%{conn: conn, user: user}) do
+    {:ok, conn: put_coherence_session(conn, user), user: user}
   end
 end
