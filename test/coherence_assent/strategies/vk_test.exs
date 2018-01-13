@@ -23,12 +23,6 @@ defmodule CoherenceAssent.VKTest do
 
   describe "callback/2" do
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
-      users = [%{"id" => 210700286,
-                 "first_name" => "Lindsay",
-                 "last_name" => "Stirling",
-                 "screen_name" => "lindseystirling",
-                 "verified" => 1}]
-
       Bypass.expect_once bypass, "POST", "/access_token", fn conn ->
         send_resp(conn, 200, Poison.encode!(%{"access_token" => "access_token", "email" => "lindsay.stirling@example.com"}))
       end
