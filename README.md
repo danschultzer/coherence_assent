@@ -23,7 +23,7 @@ Add CoherenceAssent to your list of dependencies in `mix.exs`:
 def deps do
   [
     # ...
-    {:coherence_assent, "~> 0.2.1"}
+    {:coherence_assent, "~> 0.2.2"}
     # ...
   ]
 end
