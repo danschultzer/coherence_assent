@@ -159,7 +159,7 @@ defmodule CoherenceAssent.AuthControllerTest do
     end
   end
 
-  describe "destroy/2" do
+  describe "delete/2" do
     test "with no user password", %{conn: conn, user: user} do
       fixture(:user_identity, user, %{provider: @provider, uid: "1"})
 

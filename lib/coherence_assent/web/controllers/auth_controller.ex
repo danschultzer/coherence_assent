@@ -6,7 +6,7 @@ defmodule CoherenceAssent.AuthController do
   alias CoherenceAssent.Controller
   import Phoenix.Naming, only: [humanize: 1]
 
-  plug Coherence.RequireLogin when action in ~w(destroy)a
+  plug Coherence.RequireLogin when action in ~w(delete)a
 
   def index(conn, %{"provider" => provider}) do
     config = provider
