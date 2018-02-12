@@ -80,7 +80,7 @@ defmodule CoherenceAssent.Schema do
   """
   defmacro coherence_assent_schema do
     quote do
-      has_many :user_identities, CoherenceAssent.UserIdentities.UserIdentity, foreign_key: :user_id
+      has_many :user_identities, CoherenceAssent.UserIdentities.UserIdentity, foreign_key: :user_id, on_delete: :delete_all
     end
   end
 end
