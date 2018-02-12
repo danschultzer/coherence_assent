@@ -20,4 +20,17 @@ defmodule CoherenceAssent.SchemaTest do
       refute changeset.valid?
     end
   end
+
+  describe "Repo.delete/1" do
+    test "removes all identities", %{user: user} do
+      fixture(:user_identity, user, %{provider: "test_provider", uid: "1"})
+      fixture(:user_identity, user, %{provider: "test_provider", uid: "2"})
+
+      assert length(CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity)) == 2
+
+      CoherenceAssent.repo.delete(user)
+
+      assert length(CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity)) == 0
+    end
+  end
 end
