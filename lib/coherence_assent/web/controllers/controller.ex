@@ -46,9 +46,10 @@ defmodule CoherenceAssent.Controller do
   end
 
   defp send_confirmation(conn, user) do
-    case Coherence.Config.user_schema.confirmed?(user) do
-      false -> Coherence.ControllerHelpers.send_confirmation(conn, user, Coherence.Config.user_schema)
-      _     -> conn
+    cond do
+      not Coherence.Config.user_schema.confirmable?() -> conn
+      not Coherence.Config.user_schema.confirmed?(user) -> Coherence.ControllerHelpers.send_confirmation(conn, user, Coherence.Config.user_schema)
+      true -> conn
     end
   end
 end
