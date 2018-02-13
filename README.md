@@ -204,6 +204,10 @@ defmodule TestProvider do
 end
 ```
 
+## Security concerns
+
+All sessions created through `CoherenceAssent` provider authentication are temporary, and doesn't use the `rememberable` configuration in Coherence. However, it's a good idea to do some housekeeping in your app and making sure that you have the level of security as warranted by the scope of your app. This may include requiring users to reauthenticate before viewing or editing their user details.
+
 ## LICENSE
 
 (The MIT License)
