@@ -13,6 +13,7 @@ defmodule CoherenceAssent.Test.Coherence.Messages do
   def login_with_provider(opts), do: dgettext("coherence_assent", "Sign in with %{provider}", opts)
   def remove_provider_authentication(opts), do: dgettext("coherence_assent", "Remove %{provider} authentication", opts)
   def authentication_has_been_removed(opts), do: dgettext("coherence_assent", "Authentication with %{provider} has been removed", opts)
+  def confirmation_email_sent, do: dgettext(@domain, "Confirmation email sent.")
 
   def dgettext(domain, msg, opts \\ %{}), do: msg
 end

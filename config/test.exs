@@ -12,6 +12,9 @@ config :coherence,
   email_from_email: "yourname@example.com",
   opts: [:authenticatable, :recoverable, :lockable, :trackable, :unlockable_with_token, :confirmable, :registerable]
 
+config :coherence, CoherenceAssent.Coherence.Mailer,
+  adapter: Swoosh.Adapters.Test
+
 config :coherence_assent, ecto_repos: [CoherenceAssent.Test.Repo]
 config :coherence_assent, CoherenceAssent.Test.Repo,
   adapter: Ecto.Adapters.Postgres,
