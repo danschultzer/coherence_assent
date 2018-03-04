@@ -1,6 +1,6 @@
 defmodule TestProvider do
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth2, as: OAuth2Helper
+  alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 
   def authorize_url(conn, config) do
     OAuth2Helper.authorize_url(conn, set_config(config))
@@ -11,7 +11,7 @@ defmodule TestProvider do
 
     conn
     |> OAuth2Helper.callback(config, params)
-    |> normalize
+    |> normalize()
   end
 
   defp set_config(config) do
@@ -32,5 +32,5 @@ defmodule TestProvider do
 
     {:ok, %{conn: conn, client: client, user: user}}
   end
-  defp normalize({:error, _} = response), do: response
+  defp normalize({:error, error}), do: {:error, error}
 end

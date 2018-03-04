@@ -4,18 +4,20 @@ defmodule CoherenceAssent.Strategy.Google do
   """
 
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth2, as: OAuth2Helper
+  alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 
+  @spec authorize_url(Conn.t, Keyword.t) :: {:ok, %{conn: Conn.t, url: String.t}}
   def authorize_url(conn, config) do
     OAuth2Helper.authorize_url(conn, set_config(config))
   end
 
+  @spec callback(Conn.t, Keyword.t, map) :: {:ok, %{conn: Conn.t, client: OAuth2.Client.t, user: map}} | {:error, term}
   def callback(conn, config, params) do
     config = set_config(config)
 
     conn
     |> OAuth2Helper.callback(config, params)
-    |> normalize
+    |> normalize()
   end
 
   defp set_config(config) do
@@ -43,7 +45,7 @@ defmodule CoherenceAssent.Strategy.Google do
 
     {:ok, %{conn: conn, client: client, user: user}}
   end
-  defp normalize({:error, _} = error), do: error
+  defp normalize({:error, error}), do: {:error, error}
 
   defp verified_email(%{"email_verified" => "true"} = user), do: user["email"]
   defp verified_email(_), do: nil

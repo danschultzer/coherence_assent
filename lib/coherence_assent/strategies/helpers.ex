@@ -4,6 +4,7 @@ defmodule CoherenceAssent.Strategy.Helpers do
   """
 
   @doc false
+  @spec prune(map) :: map
   def prune(map) do
     map
     |> Enum.map(fn {k, v} -> if is_map(v), do: {k, prune(v)}, else: {k, v} end)

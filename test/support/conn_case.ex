@@ -42,12 +42,10 @@ defmodule CoherenceAssent.Test.ConnCase do
     end
   end
 
-
   setup tags do
     unless tags[:async] do
       :ok = Ecto.Adapters.SQL.Sandbox.checkout(CoherenceAssent.Test.Repo)
     end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end

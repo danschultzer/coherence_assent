@@ -37,7 +37,7 @@ You need to make sure the Coherence views and routes has been set up first. If t
 
 Add all the Coherence files to your project:
 
-```
+```bash
 mix coh.install --full --confirmable --invitable
 ```
 
@@ -97,7 +97,7 @@ mix coherence_assent.install
 
 The install script will attempt to update the following files that Coherence have installed:
 
-```
+```text
 LIB_PATH/coherence/user.ex
 WEB_PATH/templates/coherence/edit.html.eex
 WEB_PATH/templates/coherence/new.html.eex
@@ -131,7 +131,7 @@ end
 
 The following routes will now be available in your app:
 
-```
+```text
 coherence_assent_auth_path          GET    /auth/:provider            CoherenceAssent.AuthorizationController :new
 coherence_assent_auth_path          GET    /auth/:provider/callback   CoherenceAssent.AuthorizationController :create
 coherence_assent_registration_path  GET    /auth/:provider/new        CoherenceAssent.RegistrationController  :add_login_field
@@ -144,7 +144,7 @@ Remember to run the new migrations: `mix ecto.setup`
 
 Strategies for Twitter, Facebook, Google, Github and Basecamp are included. We'll go through how to set up the Github strategy.
 
-First, register [a new app on Github](https://github.com/settings/applications/new) and add "http://localhost:4000/auth/github/callback" as callback URL. Then add the following to `config/config.exs` and add the client id and client secret:
+First, register [a new app on Github](https://github.com/settings/applications/new) and add `http://localhost:4000/auth/github/callback` as callback URL. Then add the following to `config/config.exs` and add the client id and client secret:
 
 ```elixir
 config :coherence_assent, :providers,
@@ -166,7 +166,7 @@ You can add your own strategy. Here's an example of an OAuth 2.0 implementation:
 ```elixir
 defmodule TestProvider do
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth2, as: OAuth2Helper
+  alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 
   def authorize_url(conn, config) do
     OAuth2Helper.authorize_url(conn, set_config(config))
@@ -177,7 +177,7 @@ defmodule TestProvider do
 
     conn
     |> OAuth2Helper.callback(config, params)
-    |> normalize
+    |> normalize()
   end
 
   defp set_config(config) do
@@ -200,7 +200,7 @@ defmodule TestProvider do
 
     {:ok, %{conn: conn, client: client, user: user}}
   end
-  defp normalize({:error, _} = error), do: error
+  defp normalize({:error, error}), do: {:error, error}
 end
 ```
 
