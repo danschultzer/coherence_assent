@@ -1,4 +1,4 @@
-defmodule CoherenceAssent.Strategies.OAuth do
+defmodule CoherenceAssent.Strategy.OAuth do
   @moduledoc """
   OAuth 1.0 strategy.
   """

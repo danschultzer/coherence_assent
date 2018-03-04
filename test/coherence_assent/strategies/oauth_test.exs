@@ -2,7 +2,7 @@ defmodule CoherenceAssent.OAuthTest do
   use CoherenceAssent.Test.ConnCase
 
   import OAuth2.TestHelpers
-  alias CoherenceAssent.Strategies.OAuth
+  alias CoherenceAssent.Strategy.OAuth
 
   setup %{conn: conn} do
     conn = session_conn(conn)

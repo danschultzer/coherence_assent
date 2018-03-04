@@ -4,7 +4,7 @@ defmodule CoherenceAssent.Strategy.Twitter do
   """
 
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth, as: OAuthHelper
+  alias CoherenceAssent.Strategy.OAuth, as: OAuthHelper
 
   @doc false
   @spec authorize_url(Conn.t, Keyword.t) :: {:ok, %{conn: Conn.t, url: String.t}}

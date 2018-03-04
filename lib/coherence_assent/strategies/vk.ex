@@ -4,7 +4,7 @@ defmodule CoherenceAssent.Strategy.VK do
   """
 
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth2, as: OAuth2Helper
+  alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 
   @spec authorize_url(Conn.t, Keyword.t) :: {:ok, %{conn: Conn.t, url: String.t}}
   def authorize_url(conn, config) do

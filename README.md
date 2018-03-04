@@ -166,7 +166,7 @@ You can add your own strategy. Here's an example of an OAuth 2.0 implementation:
 ```elixir
 defmodule TestProvider do
   alias CoherenceAssent.Strategy.Helpers
-  alias CoherenceAssent.Strategies.OAuth2, as: OAuth2Helper
+  alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 
   def authorize_url(conn, config) do
     OAuth2Helper.authorize_url(conn, set_config(config))
