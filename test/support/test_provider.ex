@@ -11,7 +11,7 @@ defmodule TestProvider do
 
     conn
     |> OAuth2Helper.callback(config, params)
-    |> normalize
+    |> normalize()
   end
 
   defp set_config(config) do
@@ -32,5 +32,5 @@ defmodule TestProvider do
 
     {:ok, %{conn: conn, client: client, user: user}}
   end
-  defp normalize({:error, _} = response), do: response
+  defp normalize({:error, error}), do: {:error, error}
 end

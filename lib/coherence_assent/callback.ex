@@ -29,8 +29,8 @@ defmodule CoherenceAssent.Callback do
       user  -> {:ok, :user_loaded, user}
     end
   end
-  defp get_or_create_user({:ok, current_user}, _, _), do: {:ok, :identity_created, current_user}
-  defp get_or_create_user({:error, _} = error, _, _), do: error
+  defp get_or_create_user({:ok, current_user}, _provider, _user), do: {:ok, :identity_created, current_user}
+  defp get_or_create_user({:error, error}, _provider, _user), do: {:error, error}
 
   @doc false
   defp insert_user_with_identity(registration_params, provider, uid) do

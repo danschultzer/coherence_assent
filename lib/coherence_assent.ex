@@ -5,15 +5,17 @@ defmodule CoherenceAssent do
   """
 
   @doc false
+  @spec config(atom) :: Keyword.t | nil
   def config(provider) do
-    providers!()
-    |> Keyword.get(String.to_atom(provider), nil)
+    Keyword.get(providers!(), String.to_atom(provider), nil)
   end
 
   @doc false
-  def repo, do: Coherence.Config.repo
+  @spec repo() :: Ecto.Repo.t | nil
+  def repo, do: Coherence.Config.repo()
 
   @doc false
+  @spec providers!() :: list | nil | no_return
   def providers! do
     Application.get_env(:coherence_assent, :providers) || raise "CoherenceAssent is missing the :providers configuration!"
   end
@@ -28,5 +30,9 @@ defmodule CoherenceAssent do
 
   defmodule RequestError do
     defexception [:message, :error]
+  end
+
+  defmodule ConfigurationError do
+    defexception [:message]
   end
 end

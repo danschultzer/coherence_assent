@@ -4,24 +4,31 @@ defmodule CoherenceAssent.Strategies.OAuth do
   """
 
   @doc false
-  @spec authorize_url(Conn.t, map) :: {:ok, %{conn: Conn.t, token: String.t, url: String.t}} | {:error, term}
+  @spec authorize_url(Conn.t, Keyword.t) :: {:ok, %{conn: Conn.t, url: String.t}} | {:error, %{conn: Conn.t, error: term}}
   def authorize_url(conn, config) do
-    {:ok, %{conn: conn}}
-    |> get_request_token(config, [{"oauth_callback", config[:redirect_uri]}])
+    config
+    |> get_request_token([{"oauth_callback", config[:redirect_uri]}])
     |> build_authorize_url(config)
+    |> case do
+      {:ok, url} -> {:ok, %{conn: conn, url: url}}
+      {:error, term} -> {:error, %{conn: conn, error: term}}
+    end
   end
 
   @doc false
-  @spec callback(Conn.t, map, map) :: {:ok, %{conn: Conn.t, user: map}} | {:error, term}
+  @spec callback(Conn.t, Keyword.t, map) :: {:ok, %{conn: Conn.t, user: map}} | {:error, %{conn: Conn.t, error: term}}
   def callback(conn, config, %{"oauth_token" => oauth_token, "oauth_verifier" => oauth_verifier}) do
-    conn
-    |> get_access_token(config, oauth_token, oauth_verifier)
+    config
+    |> get_access_token(oauth_token, oauth_verifier)
     |> get_user(config)
+    |> case do
+      {:ok, user} -> {:ok, %{conn: conn, user: user}}
+      {:error, term} -> {:error, %{conn: conn, error: term}}
+    end
   end
 
-  defp get_request_token({:ok, %{conn: conn}}, config, params) do
-    creds = OAuther.credentials(consumer_key: config[:consumer_key],
-                                consumer_secret: config[:consumer_secret])
+  defp get_request_token(config, params) do
+    creds = OAuther.credentials(consumer_key: config[:consumer_key], consumer_secret: config[:consumer_secret])
     request_token_url = process_url(config, config[:request_token_url] || "/oauth/request_token")
 
     [site: config[:site],
@@ -30,21 +37,21 @@ defmodule CoherenceAssent.Strategies.OAuth do
      params: params,
      body: "",
      creds: creds]
-    |> request
-    |> process_request_token_response(conn)
+    |> request()
+    |> process_request_token_response()
   end
 
-  defp build_authorize_url({:ok, %{conn: conn, token: token}}, config) do
+  defp build_authorize_url({:ok, token}, config) do
     url = process_url(config, config[:authorize_url] || "/oauth/authenticate")
     url = url <> "?" <> URI.encode_query(%{oauth_token: token["oauth_token"]})
 
-    {:ok, %{conn: conn, token: token, url: url}}
+    {:ok, url}
   end
   defp build_authorize_url({:error, error}, _config), do: {:error, error}
 
   @doc false
-  @spec get_access_token(Conn.t, map, String.t, String.t) :: {:ok, %{conn: Conn.t, token: String.t}} | {:error, term}
-  def get_access_token(conn, config, oauth_token, oauth_verifier) do
+  @spec get_access_token(Keyword.t, String.t, String.t) :: {:ok, map} | {:error, term}
+  def get_access_token(config, oauth_token, oauth_verifier) do
     creds = OAuther.credentials(consumer_key: config[:consumer_key],
                                 consumer_secret: config[:consumer_secret],
                                 token: oauth_token)
@@ -56,8 +63,8 @@ defmodule CoherenceAssent.Strategies.OAuth do
      params: [{"oauth_verifier", oauth_verifier}],
      body: "",
      creds: creds]
-    |> request
-    |> process_request_token_response(conn)
+    |> request()
+    |> process_request_token_response()
   end
 
   defp request(site: site, url: url, method: method, params: params, body: body, creds: creds) do
@@ -67,21 +74,19 @@ defmodule CoherenceAssent.Strategies.OAuth do
     method
     |> OAuth2.Request.request(%OAuth2.Client{site: site}, url, body, [header], [form: req_params])
     |> case do
-         {:ok, response} ->
-           {:ok, response.body}
-         {:error, error} ->
-           {:error, error}
+         {:ok, response} -> {:ok, response.body}
+         {:error, error} -> {:error, error}
        end
   end
 
-  defp process_request_token_response({:ok, body}, conn),
-    do: {:ok, %{conn: conn, token: URI.decode_query(body)}}
-  defp process_request_token_response({:error, error}, conn),
-    do: {:error, %{conn: conn, error: error}}
+  defp process_request_token_response({:ok, body}),
+    do: {:ok, URI.decode_query(body)}
+  defp process_request_token_response({:error, error}),
+    do: {:error, error}
 
   @doc false
   @spec get_user({:ok, map} | {:error, term}, Keyword.t) :: {:ok, map} | {:error, term}
-  def get_user({:ok, %{conn: conn, token: token}}, config) do
+  def get_user({:ok, token}, config) do
     creds = OAuther.credentials(consumer_key: config[:consumer_key],
                                 consumer_secret: config[:consumer_secret],
                                 token: token["oauth_token"],
@@ -93,16 +98,9 @@ defmodule CoherenceAssent.Strategies.OAuth do
      params: [],
      body: "",
      creds: creds]
-    |> request
-    |> process_user_response(conn)
+    |> request()
   end
-  def get_user({:error, _} = error, _config), do: error
-
-  defp process_user_response({:ok, user}, conn),
-    do: {:ok, %{conn: conn, user: user}}
-  defp process_user_response({:error, error}, _conn) do
-    raise "Error: #{inspect error}"
-  end
+  def get_user({:error, error}, _config), do: {:error, error}
 
   defp process_url(config, url) do
     case String.downcase(url) do

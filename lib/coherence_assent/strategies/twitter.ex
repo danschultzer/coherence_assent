@@ -7,17 +7,19 @@ defmodule CoherenceAssent.Strategy.Twitter do
   alias CoherenceAssent.Strategies.OAuth, as: OAuthHelper
 
   @doc false
+  @spec authorize_url(Conn.t, Keyword.t) :: {:ok, %{conn: Conn.t, url: String.t}}
   def authorize_url(conn, config) do
     OAuthHelper.authorize_url(conn, set_config(config))
   end
 
   @doc false
+  @spec callback(Conn.t, Keyword.t, map) :: {:ok, %{conn: Conn.t, client: OAuth2.Client.t, user: map}} | {:error, term}
   def callback(conn, config, params) do
     config = config |> set_config
 
     conn
     |> OAuthHelper.callback(config, params)
-    |> normalize
+    |> normalize()
   end
 
   defp set_config(config) do
@@ -42,5 +44,5 @@ defmodule CoherenceAssent.Strategy.Twitter do
 
     {:ok, %{conn: conn, user: user}}
   end
-  defp normalize({:error, _} = error), do: error
+  defp normalize({:error, error}), do: {:error, error}
 end

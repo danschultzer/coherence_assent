@@ -10,9 +10,8 @@ defmodule CoherenceAssent.GoogleTest do
     bypass = Bypass.open
     config = [site: bypass_server(bypass),
               token_url: "/o/oauth2/token"]
-    params = %{"code" => "test", "redirect_uri" => "test"}
 
-    {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    {:ok, conn: conn, config: config, bypass: bypass}
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
@@ -21,6 +20,12 @@ defmodule CoherenceAssent.GoogleTest do
   end
 
   describe "callback/2" do
+    setup %{conn: conn, config: config, bypass: bypass} do
+      params = %{"code" => "test", "redirect_uri" => "test"}
+
+      {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    end
+
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/o/oauth2/token", fn conn ->
         send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))

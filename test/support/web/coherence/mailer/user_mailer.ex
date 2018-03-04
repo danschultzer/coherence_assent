@@ -1,6 +1,5 @@
 defmodule CoherenceAssent.Coherence.UserEmail do
   import Swoosh.Email
-  alias CoherenceAssent.Coherence.Mailer
 
   def confirmation(_user, _url) do
     %Swoosh.Email{}

@@ -11,9 +11,8 @@ defmodule CoherenceAssent.VKTest do
     config = [site: bypass_server(bypass),
               authorize_url: "/authorize",
               token_url: "/access_token"]
-    params = %{"code" => "test", "redirect_uri" => "test"}
 
-    {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    {:ok, conn: conn, config: config, bypass: bypass}
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
@@ -22,6 +21,13 @@ defmodule CoherenceAssent.VKTest do
   end
 
   describe "callback/2" do
+    setup %{conn: conn, config: config, bypass: bypass} do
+      params = %{"code" => "test", "redirect_uri" => "test", "state" => "test"}
+      conn = Plug.Conn.put_session(conn, "coherence_assent.state", "test")
+
+      {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    end
+
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/access_token", fn conn ->
         send_resp(conn, 200, Poison.encode!(%{"access_token" => "access_token", "email" => "lindsay.stirling@example.com"}))

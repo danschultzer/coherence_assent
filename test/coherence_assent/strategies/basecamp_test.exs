@@ -9,9 +9,8 @@ defmodule CoherenceAssent.BasecampTest do
 
     bypass = Bypass.open
     config = [site: bypass_server(bypass)]
-    params = %{"code" => "test", "redirect_uri" => "test"}
 
-    {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    {:ok, conn: conn, config: config, bypass: bypass}
   end
 
   test "authorize_url/2", %{conn: conn, config: config} do
@@ -21,6 +20,12 @@ defmodule CoherenceAssent.BasecampTest do
   end
 
   describe "callback/2" do
+    setup %{conn: conn, config: config, bypass: bypass} do
+      params = %{"code" => "test", "redirect_uri" => "test"}
+
+      {:ok, conn: conn, config: config, params: params, bypass: bypass}
+    end
+
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       accounts = [%{
                     "product" => "bc3",
