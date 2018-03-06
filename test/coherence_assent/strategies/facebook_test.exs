@@ -15,7 +15,7 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
 
   test "authorize_url/2", %{conn: conn, config: config} do
     assert {:ok, %{conn: _conn, url: url}} = Facebook.authorize_url(conn, config)
-    assert url =~ "https://www.facebook.com/v2.6/dialog/oauth?client_id="
+    assert url =~ "https://www.facebook.com/v2.12/dialog/oauth?client_id="
   end
 
   describe "callback/2" do
@@ -28,10 +28,18 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
 
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/oauth/access_token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        assert {:ok, body, _conn} = Plug.Conn.read_body(conn)
+        assert body =~ "scope=email"
+
+        send_resp(conn, 200, Poison.encode!(%{"access_token" => "access_token"}))
       end
 
       Bypass.expect_once bypass, "GET", "/me", fn conn ->
+        conn = Plug.Conn.fetch_query_params(conn)
+
+        assert conn.params["fields"] == "name,email"
+        assert conn.params["appsecret_proof"] == Base.encode16(:crypto.hmac(:sha256, "", "access_token"), case: :lower)
+
         user = %{name: "Dan Schultzer",
                  email: "foo@example.com",
                  id: "1"}
