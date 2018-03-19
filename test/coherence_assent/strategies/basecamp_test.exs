@@ -4,6 +4,8 @@ defmodule CoherenceAssent.BasecampTest do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.Basecamp
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -50,10 +52,12 @@ defmodule CoherenceAssent.BasecampTest do
                   }]
 
       Bypass.expect_once bypass, "POST", "/authorization/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/authorization.json", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         user = %{"expires_at" => "2012-03-22T16:56:48-05:00",
                  "identity" => %{
                    "id" => 9999999,

@@ -4,6 +4,8 @@ defmodule CoherenceAssent.Strategy.OAuth2Test do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Strategy
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -31,10 +33,12 @@ defmodule CoherenceAssent.Strategy.OAuth2Test do
 
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/oauth/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/api/user", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         user = %{name: "Dan Schultzer", email: "foo@example.com", uid: "1"}
         Plug.Conn.resp(conn, 200, Poison.encode!(user))
       end
@@ -71,7 +75,7 @@ defmodule CoherenceAssent.Strategy.OAuth2Test do
       config = Keyword.put(config, :user_url, nil)
 
       Bypass.expect_once bypass, "POST", "/oauth/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       expected = %CoherenceAssent.ConfigurationError{message: "No user URL set"}
@@ -84,7 +88,7 @@ defmodule CoherenceAssent.Strategy.OAuth2Test do
       config = Keyword.put(config, :user_url, "http://localhost:8888/api/user")
 
       Bypass.expect_once bypass, "POST", "/oauth/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       expected = %OAuth2.Error{reason: :econnrefused}
@@ -95,10 +99,11 @@ defmodule CoherenceAssent.Strategy.OAuth2Test do
 
     test "user url unauthorized access token", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/oauth/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/api/user", fn conn ->
+        assert_access_token_in_header conn, @access_token
         Plug.Conn.resp(conn, 401, Poison.encode!(%{"error" => "Unauthorized"}))
       end
 

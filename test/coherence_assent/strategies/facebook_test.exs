@@ -4,6 +4,8 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.Facebook
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -31,14 +33,16 @@ defmodule CoherenceAssent.Strategy.FacebookTest do
         assert {:ok, body, _conn} = Plug.Conn.read_body(conn)
         assert body =~ "scope=email"
 
-        send_resp(conn, 200, Poison.encode!(%{"access_token" => "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{"access_token" => @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/me", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         conn = Plug.Conn.fetch_query_params(conn)
 
         assert conn.params["fields"] == "name,email"
-        assert conn.params["appsecret_proof"] == Base.encode16(:crypto.hmac(:sha256, "", "access_token"), case: :lower)
+        assert conn.params["appsecret_proof"] == Base.encode16(:crypto.hmac(:sha256, "", @access_token), case: :lower)
 
         user = %{name: "Dan Schultzer",
                  email: "foo@example.com",

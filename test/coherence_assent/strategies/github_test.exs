@@ -4,6 +4,8 @@ defmodule CoherenceAssent.Strategy.GithubTest do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.Github
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -28,10 +30,12 @@ defmodule CoherenceAssent.Strategy.GithubTest do
 
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/login/oauth/access_token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/user", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         user = %{
           login: "octocat",
           id: 1,
@@ -68,6 +72,8 @@ defmodule CoherenceAssent.Strategy.GithubTest do
       end
 
       Bypass.expect_once bypass, "GET", "/user/emails", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         emails = [
                     %{
                       email: "octocat@github.com",

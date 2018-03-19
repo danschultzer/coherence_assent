@@ -4,6 +4,8 @@ defmodule CoherenceAssent.VKTest do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.VK
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -33,15 +35,17 @@ defmodule CoherenceAssent.VKTest do
         assert {:ok, body, _conn} = Plug.Conn.read_body(conn)
         assert body =~ "scope=email"
 
-        send_resp(conn, 200, Poison.encode!(%{"access_token" => "access_token", "email" => "lindsay.stirling@example.com"}))
+        send_resp(conn, 200, Poison.encode!(%{"access_token" => @access_token, "email" => "lindsay.stirling@example.com"}))
       end
 
       Bypass.expect_once bypass, "GET", "/method/users.get", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         conn = Plug.Conn.fetch_query_params(conn)
 
         assert conn.params["fields"] == "uid,first_name,last_name,photo_200,screen_name,verified"
         assert conn.params["v"] == "5.69"
-        assert conn.params["access_token"] == "access_token"
+        assert conn.params["access_token"] == @access_token
 
         users = [%{"id" => 210700286,
                    "first_name" => "Lindsay",
