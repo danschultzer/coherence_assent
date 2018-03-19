@@ -1,6 +1,6 @@
 # CoherenceAssent
 
-[![Build Status](https://travis-ci.org/danschultzer/coherence_assent.svg?branch=master)](https://travis-ci.org/danschultzer/coherence_assent)
+[![Build Status](https://travis-ci.org/danschultzer/coherence_assent.svg?branch=master)](https://travis-ci.org/danschultzer/coherence_assent) [![hex.pm](http://img.shields.io/hexpm/v/coherence_assent.svg?style=flat)](https://hex.pm/packages/coherence_assent) [![hex.pm downloads](https://img.shields.io/hexpm/dt/coherence_assent.svg?style=flat)](https://hex.pm/packages/coherence_assent)
 
 Use Google, Github, Twitter, Facebook, Basecamp, VK or add your own strategy for authorization to your Coherence Phoenix app.
 
