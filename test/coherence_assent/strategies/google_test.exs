@@ -4,6 +4,8 @@ defmodule CoherenceAssent.GoogleTest do
   import OAuth2.TestHelpers
   alias CoherenceAssent.Strategy.Google
 
+  @access_token "access_token"
+
   setup %{conn: conn} do
     conn = session_conn(conn)
 
@@ -28,10 +30,12 @@ defmodule CoherenceAssent.GoogleTest do
 
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       Bypass.expect_once bypass, "POST", "/o/oauth2/token", fn conn ->
-        send_resp(conn, 200, Poison.encode!(%{access_token: "access_token"}))
+        send_resp(conn, 200, Poison.encode!(%{access_token: @access_token}))
       end
 
       Bypass.expect_once bypass, "GET", "/people/me/openIdConnect", fn conn ->
+        assert_access_token_in_header conn, @access_token
+
         user = %{"kind" => "plus#personOpenIdConnect",
                  "gender" => "",
                  "sub" => "1",

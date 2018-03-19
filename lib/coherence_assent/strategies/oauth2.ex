@@ -29,11 +29,7 @@ defmodule CoherenceAssent.Strategy.OAuth2 do
     state
     |> check_state(client, params)
     |> get_access_token(config, params)
-    |> get_user(config[:user_url])
-    |> case do
-      {:ok, user} -> {:ok, %{conn: conn, client: client, user: user}}
-      {:error, error} -> {:error, %{conn: conn, error: error}}
-    end
+    |> get_user_with_client(config[:user_url], conn)
   end
 
   @doc false
@@ -81,6 +77,17 @@ defmodule CoherenceAssent.Strategy.OAuth2 do
     |> process_user_response()
   end
   def get_user({:error, error}, _user_url), do: {:error, error}
+
+  defp get_user_with_client({:ok, client}, user_url, conn) do
+    {:ok, client}
+    |> get_user(user_url)
+    |> case do
+      {:ok, user} -> {:ok, %{conn: conn, client: client, user: user}}
+      {:error, error} -> {:error, %{conn: conn, error: error}}
+    end
+  end
+  defp get_user_with_client({:error, error}, _user_url, conn),
+    do: {:error, %{conn: conn, error: error}}
 
   defp process_user_response({:ok, %OAuth2.Response{body: user}}), do: {:ok, user}
   defp process_user_response({:error, %OAuth2.Response{status_code: 401}}),
