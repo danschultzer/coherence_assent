@@ -138,7 +138,7 @@ coherence_assent_registration_path  GET    /auth/:provider/new        CoherenceA
 coherence_assent_registration_path  GET    /auth/:provider/create     CoherenceAssent.RegistrationController  :create
 ```
 
-Remember to run the new migrations: `mix ecto.setup`
+Remember to run the new migrations: `mix ecto.setup` (or `mix ecto.migrate`)
 
 ## Setting up a provider
 
