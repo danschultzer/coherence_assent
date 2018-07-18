@@ -23,7 +23,7 @@ Add CoherenceAssent to your list of dependencies in `mix.exs`:
 def deps do
   [
     # ...
-    {:coherence_assent, "~> 0.2"}
+    {:coherence_assent, "~> 0.3"}
     # ...
   ]
 end
@@ -99,8 +99,9 @@ The install script will attempt to update the following files that Coherence hav
 
 ```text
 LIB_PATH/coherence/user.ex
-WEB_PATH/templates/coherence/edit.html.eex
-WEB_PATH/templates/coherence/new.html.eex
+WEB_PATH/templates/coherence/registration/edit.html.eex
+WEB_PATH/templates/coherence/registration/new.html.eex
+WEB_PATH/templates/coherence/session/new.html.eex
 WEB_PATH/views/coherence/coherence_view_helpers.ex
 WEB_PATH/coherence_messages.ex
 ```
@@ -132,10 +133,11 @@ end
 The following routes will now be available in your app:
 
 ```text
-coherence_assent_auth_path          GET    /auth/:provider            CoherenceAssent.AuthorizationController :new
-coherence_assent_auth_path          GET    /auth/:provider/callback   CoherenceAssent.AuthorizationController :create
-coherence_assent_registration_path  GET    /auth/:provider/new        CoherenceAssent.RegistrationController  :add_login_field
-coherence_assent_registration_path  GET    /auth/:provider/create     CoherenceAssent.RegistrationController  :create
+coherence_assent_auth_path  GET             /auth/:provider              CoherenceAssent.AuthController :index
+coherence_assent_auth_path  GET             /auth/:provider/callback     CoherenceAssent.AuthController :callback
+coherence_assent_auth_path  DELETE          /auth/:provider              CoherenceAssent.AuthController :delete
+coherence_assent_registration_path  GET     /auth/:provider/new          CoherenceAssent.RegistrationController :add_login_field
+coherence_assent_registration_path  POST    /auth/:provider/create       CoherenceAssent.RegistrationController :create
 ```
 
 Remember to run the new migrations: `mix ecto.setup` (or `mix ecto.migrate`)
