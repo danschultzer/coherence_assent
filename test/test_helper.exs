@@ -28,9 +28,8 @@ defmodule TestHelpers do
   end
 
   defp install_coherence(web_path) do
-    Mix.Task.run "coh.install", ~w(--full --confirmable --invitable --no-config --no-models --no-views --no-web --no-messages --web-path=#{web_path} --no-controllers --repo=CoherenceAssent.Test.Repo --web-module=CoherenceAssent.Test.Web --silent)
+    Mix.Task.run "coh.install", ~w(--full --confirmable --invitable --no-config --no-models --no-views --no-web --no-messages --web-path=#{web_path} --repo=CoherenceAssent.Test.Repo --web-module=CoherenceAssent.Test.Web --silent)
     Mix.Task.run "coherence_assent.install", ~w(--no-update-coherence --web-path=#{web_path} --silent)
-    # EEx.compile_file("tmp/coherence/web/templates/coherence/registration/add_login_field.html.eex")
   end
 
   defp reload_views do

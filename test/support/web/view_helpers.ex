@@ -1,7 +1,7 @@
 defmodule CoherenceAssent.Test.Web.ViewHelpers do
   @moduledoc false
   use Phoenix.HTML
-  use CoherenceAssent.ViewHelpers, helpers: Coherence.ControllerHelpers.router_helpers()
+  use CoherenceAssent.ViewHelpers, helpers: Coherence.Controller.router_helpers()
 
   @type conn :: Plug.Conn.t
 

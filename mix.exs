@@ -1,7 +1,7 @@
 defmodule CoherenceAssent.Mixfile do
   use Mix.Project
 
-  @version "0.3.2"
+  @version "0.4.0"
 
   def project do
     [
@@ -45,7 +45,7 @@ defmodule CoherenceAssent.Mixfile do
 
   defp deps do
     [
-      {:coherence, "0.5.0"},
+      {:coherence, ">= 0.5.2 and < 0.6.0"},
       {:oauth2, "~> 0.9"},
       {:oauther, "~> 1.1"},
 

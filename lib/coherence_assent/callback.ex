@@ -2,7 +2,7 @@ defmodule CoherenceAssent.Callback do
   @moduledoc false
 
   alias CoherenceAssent.UserIdentities
-  alias Coherence.ControllerHelpers, as: Helpers
+  alias Coherence.Controller, as: Helpers
   alias Coherence.Schemas
 
   @doc false
