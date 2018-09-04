@@ -1,4 +1,6 @@
 defmodule CoherenceAssent.Test.Web do
+  @moduledoc false
+
   def view do
     quote do
       use Phoenix.View, root: "tmp/coherence/web/templates"

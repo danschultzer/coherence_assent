@@ -1,4 +1,5 @@
 defmodule CoherenceAssent.Coherence.UserEmail do
+  @moduledoc false
   import Swoosh.Email
 
   def confirmation(_user, _url) do

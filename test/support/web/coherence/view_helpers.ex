@@ -1,4 +1,5 @@
 defmodule CoherenceAssent.Test.Coherence.ViewHelpers do
+  @moduledoc false
   use Phoenix.HTML
 
   @spec required_label(atom, String.t | atom, Keyword.t) :: tuple

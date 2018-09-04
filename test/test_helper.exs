@@ -33,7 +33,7 @@ defmodule TestHelpers do
     # EEx.compile_file("tmp/coherence/web/templates/coherence/registration/add_login_field.html.eex")
   end
 
-  defp reload_views() do
+  defp reload_views do
     Code.load_file("test/support/web/views/layout_view.ex")
     Code.load_file("test/support/web/views/registration_view.ex")
   end

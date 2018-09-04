@@ -1,6 +1,6 @@
 defmodule CoherenceAssent.Test.Fixture do
-  alias CoherenceAssent.Test.Repo
-  alias CoherenceAssent.Test.User
+  @moduledoc false
+  alias CoherenceAssent.Test.{Repo, User}
   alias CoherenceAssent.UserIdentities.UserIdentity
 
   def fixture(:user, attrs \\ %{}) do

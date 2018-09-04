@@ -482,8 +482,7 @@ defmodule Mix.Tasks.CoherenceAssent.Install do
     binding = Keyword.put binding, :base, base
 
     bin_opts
-    |> Enum.map(&({&1, true}))
-    |> Enum.into(%{})
+    |> Enum.into(%{}, &({&1, true}))
     |> Map.put(:web_path, web_path)
     |> Map.put(:instructions, "")
     |> Map.put(:base, base)

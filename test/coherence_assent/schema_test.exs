@@ -26,11 +26,11 @@ defmodule CoherenceAssent.SchemaTest do
       fixture(:user_identity, user, %{provider: "test_provider", uid: "1"})
       fixture(:user_identity, user, %{provider: "test_provider", uid: "2"})
 
-      assert length(CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity)) == 2
+      assert [_identity_1, _identity_2] = CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity)
 
       CoherenceAssent.repo.delete(user)
 
-      assert length(CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity)) == 0
+      assert CoherenceAssent.repo.all(CoherenceAssent.UserIdentities.UserIdentity) == []
     end
   end
 end
