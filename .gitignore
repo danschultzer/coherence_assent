@@ -17,3 +17,5 @@ erl_crash.dump
 # vim
 *.vim
 *.swp
+
+/.elixir_ls
