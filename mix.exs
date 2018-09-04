@@ -51,11 +51,11 @@ defmodule CoherenceAssent.Mixfile do
 
       # Dev and test dependencies
       {:postgrex, ">= 0.11.1", only: :test},
-      {:credo, "~> 0.7", only: [:dev, :test]},
-      {:excoveralls, "~> 0.7", only: :test},
+      {:credo, "~> 0.10", only: [:dev, :test]},
+      {:excoveralls, "~> 0.10", only: :test},
       {:bypass, "~> 0.8", only: :test},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:phoenix_ecto, "~> 3.2", only: :test}
+      {:phoenix_ecto, "~> 3.3", only: :test}
     ]
   end
 
