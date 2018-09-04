@@ -47,7 +47,7 @@ defmodule CoherenceAssent.VKTest do
         assert conn.params["v"] == "5.69"
         assert conn.params["access_token"] == @access_token
 
-        users = [%{"id" => 210700286,
+        users = [%{"id" => 210_700_286,
                    "first_name" => "Lindsay",
                    "last_name" => "Stirling",
                    "screen_name" => "lindseystirling",

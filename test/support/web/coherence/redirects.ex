@@ -1,4 +1,5 @@
 defmodule Coherence.Redirects do
+  @moduledoc false
   use Redirects
 
   def session_create(conn, _), do: redirect(conn, to: "/session_created")

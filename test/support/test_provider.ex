@@ -1,4 +1,5 @@
 defmodule TestProvider do
+  @moduledoc false
   alias CoherenceAssent.Strategy.Helpers
   alias CoherenceAssent.Strategy.OAuth2, as: OAuth2Helper
 

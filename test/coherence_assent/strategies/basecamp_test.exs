@@ -31,21 +31,21 @@ defmodule CoherenceAssent.BasecampTest do
     test "normalizes data", %{conn: conn, config: config, params: params, bypass: bypass} do
       accounts = [%{
                     "product" => "bc3",
-                    "id" => 99999999,
+                    "id" => 99_999_999,
                     "name" => "Honcho Design",
                     "href" => "https://3.basecampapi.com/99999999",
                     "app_href" => "https://3.basecamp.com/99999999"
                   },
                   %{
                     "product" => "bcx",
-                    "id" => 88888888,
+                    "id" => 88_888_888,
                     "name" => "Wayne Enterprises, Ltd.",
                     "href" => "https://basecamp.com/88888888/api/v1",
                     "app_href" => "https://basecamp.com/88888888"
                   },
                   %{
                     "product" => "campfire",
-                    "id" => 44444444,
+                    "id" => 44_444_444,
                     "name" => "Acme Shipping Co.",
                     "href" => "https://acme4444444.campfirenow.com",
                     "app_href" => "https://acme4444444.campfirenow.com"
@@ -60,7 +60,7 @@ defmodule CoherenceAssent.BasecampTest do
 
         user = %{"expires_at" => "2012-03-22T16:56:48-05:00",
                  "identity" => %{
-                   "id" => 9999999,
+                   "id" => 9_999_999,
                    "first_name" => "Jason",
                    "last_name" => "Fried",
                    "email_address" => "jason@basecamp.com",

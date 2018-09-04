@@ -53,11 +53,11 @@ defmodule CoherenceAssent.TwitterTest do
           description: "I taught your phone that thing you like.  The Mobile Partner Engineer @Twitter. ",
           favourites_count: 588,
           follow_request_sent: nil,
-          followers_count: 10625,
+          followers_count: 10_625,
           following: nil,
           friends_count: 1181,
           geo_enabled: true,
-          id: 38895958,
+          id: 38_895_958,
           id_str: "38895958",
           is_translator: false,
           lang: "en",
@@ -97,12 +97,12 @@ defmodule CoherenceAssent.TwitterTest do
               ],
               type: "Point"
             },
-            id: 240323931419062272,
+            id: 240_323_931_419_062_272,
             id_str: "240323931419062272",
             in_reply_to_screen_name: "messl",
-            in_reply_to_status_id: 240316959173009410,
+            in_reply_to_status_id: 240_316_959_173_009_410,
             in_reply_to_status_id_str: "240316959173009410",
-            in_reply_to_user_id: 18707866,
+            in_reply_to_user_id: 18_707_866,
             in_reply_to_user_id_str: "18707866",
             place: %{
               attributes: %{},
@@ -134,7 +134,7 @@ defmodule CoherenceAssent.TwitterTest do
           statuses_count: 2609,
           time_zone: "Pacific Time (US & Canada)",
           url: nil,
-          utc_offset: -28800,
+          utc_offset: -28_800,
           verified: false
         }
         Plug.Conn.resp(conn, 200, Poison.encode!(user))

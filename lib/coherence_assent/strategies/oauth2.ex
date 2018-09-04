@@ -94,7 +94,7 @@ defmodule CoherenceAssent.Strategy.OAuth2 do
     do: {:error, %CoherenceAssent.RequestError{message: "Unauthorized token"}}
   defp process_user_response({:error, error}), do: {:error, error}
 
-  defp gen_state() do
+  defp gen_state do
     24
     |> :crypto.strong_rand_bytes()
     |> :erlang.bitstring_to_list()

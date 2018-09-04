@@ -57,7 +57,7 @@ defmodule CoherenceAssent.Schema do
                |> CoherenceAssent.repo.preload(:user_identities)
 
         authenticatable_with_identities = Coherence.Config.has_option(:authenticatable) &&
-                                          length(user.user_identities) > 0
+                                          user.user_identities != []
         validate_coherence_assent(changeset,
                                   params,
                                   authenticatable_with_identities)
