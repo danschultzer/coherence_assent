@@ -501,8 +501,8 @@ defmodule Mix.Tasks.CoherenceAssent.Install do
     opts_bin = Enum.uniq(opts_bin)
     opts_names = Enum.map opts, &(elem(&1, 0))
 
-    with  [] <- Enum.filter(opts_bin, &(not &1 in @switch_names)),
-          [] <- Enum.filter(opts_names, &(not &1 in @switch_names)) do
+    with  [] <- Enum.filter(opts_bin, &(not(&1 in @switch_names))),
+          [] <- Enum.filter(opts_names, &(not(&1 in @switch_names))) do
             {opts_bin, opts}
     else
       list -> raise_option_errors(list)
