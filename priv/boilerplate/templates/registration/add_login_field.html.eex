@@ -1,7 +1,7 @@
 <%% login_field = Coherence.Config.login_field %>
 <h3><%%= dgettext "coherence_assent", "Add %{field}", field: humanize(login_field) %></h3>
 
-<%%= form_for @changeset, Coherence.ControllerHelpers.router_helpers().coherence_assent_registration_path(@conn, :create, @provider), [as: :registration], fn f  -> %>
+<%%= form_for @changeset, Coherence.Controller.router_helpers().coherence_assent_registration_path(@conn, :create, @provider), [as: :registration], fn f  -> %>
 
   <%% if @changeset.action do %>
     <div class="alert alert-danger">

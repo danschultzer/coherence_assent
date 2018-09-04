@@ -49,7 +49,7 @@ defmodule CoherenceAssent.AuthControllerTest do
       |> put_coherence_session(user)
       |> get(coherence_assent_auth_path(conn, :callback, @provider, @callback_params))
 
-      assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :new)
+      assert redirected_to(conn) == Coherence.Controller.router_helpers().registration_path(conn, :new)
       assert get_flash(conn, :error) == "The %{provider} account is already bound to another user."
     end
 
@@ -167,7 +167,7 @@ defmodule CoherenceAssent.AuthControllerTest do
 
       conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
-      assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
+      assert redirected_to(conn) == Coherence.Controller.router_helpers().registration_path(conn, :edit)
       assert [_user] = get_user_identities()
       assert get_flash(conn, :error) == "Authentication cannot be removed until you've entered a password for your account."
     end
@@ -178,7 +178,7 @@ defmodule CoherenceAssent.AuthControllerTest do
 
       conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
-      assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
+      assert redirected_to(conn) == Coherence.Controller.router_helpers().registration_path(conn, :edit)
       assert [_user] = get_user_identities()
     end
 
@@ -190,14 +190,14 @@ defmodule CoherenceAssent.AuthControllerTest do
 
       conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
-      assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
+      assert redirected_to(conn) == Coherence.Controller.router_helpers().registration_path(conn, :edit)
       assert get_user_identities() == []
     end
 
     test "with current_user session without provider", %{conn: conn} do
       conn = delete(conn, coherence_assent_auth_path(conn, :delete, @provider))
 
-      assert redirected_to(conn) == Coherence.ControllerHelpers.router_helpers().registration_path(conn, :edit)
+      assert redirected_to(conn) == Coherence.Controller.router_helpers().registration_path(conn, :edit)
     end
   end
 

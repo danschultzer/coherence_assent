@@ -1,6 +1,6 @@
 defmodule CoherenceAssent.AuthController do
   @moduledoc false
-  use Coherence.Web, :controller
+  use CoherenceWeb, :controller
 
   alias CoherenceAssent.Callback
   alias CoherenceAssent.Controller

@@ -1,6 +1,6 @@
 defmodule CoherenceAssent.Controller do
   @moduledoc false
-  use Coherence.Web, :controller
+  use CoherenceWeb, :controller
 
   import Plug.Conn, only: [put_session: 3]
   import Phoenix.Naming, only: [humanize: 1]
@@ -48,12 +48,12 @@ defmodule CoherenceAssent.Controller do
   defp send_confirmation(conn, user) do
     cond do
       not Coherence.Config.user_schema.confirmable?() -> conn
-      not Coherence.Config.user_schema.confirmed?(user) -> Coherence.ControllerHelpers.send_confirmation(conn, user, Coherence.Config.user_schema)
+      not Coherence.Config.user_schema.confirmed?(user) -> Coherence.Controller.send_confirmation(conn, user, Coherence.Config.user_schema)
       true -> conn
     end
   end
 
   defp create_user_session(conn, user) do
-    Coherence.ControllerHelpers.login_user(conn, user)
+    Coherence.Controller.login_user(conn, user)
   end
 end

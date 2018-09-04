@@ -1,6 +1,6 @@
 defmodule CoherenceAssent.RegistrationController do
   @moduledoc false
-  use Coherence.Web, :controller
+  use CoherenceWeb, :controller
 
   alias CoherenceAssent.Callback
   import Plug.Conn, only: [get_session: 2, delete_session: 2]
@@ -8,7 +8,7 @@ defmodule CoherenceAssent.RegistrationController do
 
   def add_login_field(conn, %{"provider" => _provider} = params) do
     user_schema = Config.user_schema
-    changeset = Coherence.ControllerHelpers.changeset(:registration, user_schema, user_schema.__struct__)
+    changeset = Coherence.Controller.changeset(:registration, user_schema, user_schema.__struct__)
 
     add_login_field(conn, params, changeset)
   end
