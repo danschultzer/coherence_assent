@@ -1,3 +1,5 @@
+> **WARNING: This library is no longer maintained. Please consider switching to [PowAssent](https://github.com/danschultzer/pow_assent) using [Pow](https://github.com/danschultzer/pow). Coherence is known to have serious security issues.**
+
 # CoherenceAssent
 
 [![Build Status](https://travis-ci.org/danschultzer/coherence_assent.svg?branch=master)](https://travis-ci.org/danschultzer/coherence_assent) [![hex.pm](http://img.shields.io/hexpm/v/coherence_assent.svg?style=flat)](https://hex.pm/packages/coherence_assent) [![hex.pm downloads](https://img.shields.io/hexpm/dt/coherence_assent.svg?style=flat)](https://hex.pm/packages/coherence_assent)
